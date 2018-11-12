@@ -4,10 +4,6 @@ provider "aws" {}
 variable "rest_api_id" {}
 variable "resource_id" {}
 
-variable "ok_status_code" {
-  default = "200"
-}
-
 variable "cors_allowed_methods" {
   default = "'POST,OPTIONS,GET,PUT,PATCH,DELETE'"
 }
@@ -31,7 +27,7 @@ resource "aws_api_gateway_integration" "options-integration" {
   http_method       = "${aws_api_gateway_method.options.http_method}"
   request_templates = {
     "application/json" = <<EOF
-{ "statusCode": "${var.ok_status_code}" }
+{ "statusCode": 200 }
 EOF
 }
 }
@@ -40,7 +36,7 @@ resource "aws_api_gateway_method_response" "options-response" {
   rest_api_id         = "${var.rest_api_id}"
   resource_id         = "${var.resource_id}"
   http_method         = "${aws_api_gateway_method.options.http_method}"
-  status_code         = "${var.ok_status_code}"
+  status_code         = "200"
   response_models     = { "application/json" = "Empty" }
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = true,
@@ -53,7 +49,7 @@ resource "aws_api_gateway_integration_response" "options-integration-response" {
   rest_api_id         = "${var.rest_api_id}"
   resource_id         = "${var.resource_id}"
   http_method         = "${aws_api_gateway_method.options.http_method}"
-  status_code         = "${var.ok_status_code}"
+  status_code         = "200"
   response_parameters = {
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'",
     "method.response.header.Access-Control-Allow-Methods" = "${var.cors_allowed_methods}",
